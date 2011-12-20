@@ -5,6 +5,7 @@ Clojure. It assumes some knowledge of Emacs and Lisp, but no
 experience with Clojure or Java.
 
 + hello-world
++ use-java
 + basic-io
 
 
@@ -55,12 +56,16 @@ Changes to `.emacs` include:
 
 ## SLIME ##
 
-Some keyboard shortcuts:
+Some `clojure-mode` keyboard shortcuts:
 
   + **C-x C-e**: Evaluate the form at point
   + **C-x C-r**: Evaluate the selected region
   + **C-c C-z**: Switch to slime REPL
   + **C-c M-p**: Change current REPL package
+
+Some SLIME REPL keyboard shortcuts are:
+
+  + **C-C M-o**: Clear SLIME buffer
 
 
 ## More Documentation ##
