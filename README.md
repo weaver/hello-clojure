@@ -9,7 +9,7 @@ experience with Clojure or Java.
 + basic-io
 
 
-## Installation ##
+## Installing Clojure ##
 
 Follow these steps to set up Clojure with Emacs integration on OS X:
 
@@ -54,7 +54,7 @@ Changes to `.emacs` include:
     (add-hook 'clojure-mode-hook 'customize-clojure-mode)
 
 
-## SLIME ##
+## Using SLIME ##
 
 Some `clojure-mode` keyboard shortcuts:
 
@@ -68,7 +68,7 @@ Some SLIME REPL keyboard shortcuts are:
   + **C-C M-o**: Clear SLIME buffer
 
 
-## More Documentation ##
+## Finding Documentation ##
 
 Some helpful references are:
 
