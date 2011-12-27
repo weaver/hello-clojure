@@ -2,7 +2,7 @@
 ;;;;
 ;;;; Clojure provides immutable data structures and emphasizes
 ;;;; functional transformation. This example shows how these data
-;;;; structures can be used to change an XML document.
+;;;; structures can be used to edit an XML document.
 
 (ns functional-data.test.core
   (:require
@@ -14,10 +14,10 @@
 
 ;;; Maps
 
-;; There are several immutable data structures provided by
-;; Clojure. One of them is a map; it associates keys to values for
-;; quick lookup. Since it's an immutable structure, modifiying it
-;; produces a new map that shares its structure with the original.
+;; There are several immutable data structures built into Clojure. One
+;; of them is a map; it associates keys to values for quick
+;; lookup. Modifying a map produces a new map that shares its
+;; structure with the original.
 
 (deftest maps
   (let [orig {:a 1 :b 2}]
@@ -45,7 +45,7 @@
 ;; maps and vectors. The built-in `xml/parse` function accepts a
 ;; filename or stream. One of the convenience functions this project
 ;; provides is a form called `parse-xml-str` that parses an XML
-;; document from a string.
+;; document from a string literal.
 
 (deftest parsing-xml
   (let [data "<doc a='1'>Hello!</doc>"
@@ -93,16 +93,17 @@
 
 ;; Clojure's XML node representation is straightforward, but a little
 ;; bit verbose for writing out literally. Since XML and s-expressions
-;; are similar structures, it's easy to write [SXML][0]. Part of this
-;; project implements functions that convert between SXML and XML-node
-;; representations.
+;; are similar structures, it's convenient to write literals as
+;; [SXML][0]. Part of this project implements functions that convert
+;; between SXML and XML-node representations.
 
 ;; SXML is written as a quoted form where the "operator" is the tag,
 ;; optionally followed by a map of attributes, and the rest of the
 ;; form is the element's body. The dialect used here is different than
 ;; the spec. Since Clojure natively supports maps, they're used to
 ;; represent attributes instead of the traditional `(@ (key val) ...)`
-;; form.
+;; form. Keywords are used for element and attribute names to avoid
+;; the namespace Clojure automatically adds to symbols.
 
 
 (deftest sxml
@@ -130,11 +131,12 @@
 ;; Functionally updating a large, nested data structure like an XML
 ;; document can be tedious. Since values can't be modified in place,
 ;; changing a something several levels down from the top means each
-;; parent node has to be reconstructed along the way up.
+;; parent node has to be reconstructed along the way back up to
+;; produce an updated root value.
 
 ;; A zipper solves this problem by combining the notion of navigation
-;; through a function data structure with the ability to edit
-;; locations in the structure functionally. Consider this document:
+;; through a data structure with the ability to edit locations in the
+;; structure functionally. Consider this document:
 
 (def example-doc
   `(:html
@@ -153,7 +155,8 @@
 ;; Because zippers allow arbitrary movement through a structure,
 ;; there's no need to re-zip the entire document repeatedly when
 ;; multiple edits need to be made. This minimizes the number of nodes
-;; created. It also makes editing a document transactional.
+;; created. A nice emergent behavior of zippers is that the process of
+;; editing a document is naturally transactional.
 
 (deftest zipper-example
   ;; The `zip/xml-zip` function creates a new zipper over a root node.
@@ -200,15 +203,16 @@
 
 ;;; XML Transformation
 
-;; This project implements higher-level traversal functions and
-;; helpers for modifying attributes and content. Together, these make
-;; simplify the task of transforming an XML document.
+;; Using low-level navigational commands like this can be tedious and
+;; error-prone. This project implements higher-level traversal
+;; functions and helpers for modifying attributes and
+;; content. Together, these simplify the task of transforming an XML
+;; document.
 
 ;; A straightforward traversal strategy is to describe the movement in
-;; terms of a path. For example, `[:html :head :body :h1]` identifies
-;; the location of the `:h1` element in `example-doc`. Traversal
-;; functions recognize when to stop moving using by matching each path
-;; segment.
+;; terms of a path. For example, `[:html :body :h1]` identifies the
+;; location of the `:h1` element in `example-doc`. Traversal functions
+;; recognize when to stop moving by matching each path segment.
 
 (deftest segment-matching
   (let [top (sxml-zip example-doc)]
@@ -220,10 +224,9 @@
         "Close over a segment expression to create a location
         predicate.")))
 
-;; Moving is the counterpart to matching in a traversal strategy. The
-;; built-in zipper provides primitive movement commands. These
+;; The built-in zipper provides primitive movement commands. These
 ;; higher-level functions can step through multiple locations until a
-;; condition is satisfied.
+;; condition is satisfied (e.g. matching a segment).
 
 (deftest conditional-movement
   (let [top (sxml-zip example-doc)]
@@ -240,8 +243,8 @@
         "A terser variant of `move-until` that takes a segment instead
         of a predicate.")))
 
-;; Depth-first scanning is straightforward with these movement
-;; commands. The `forward` and `backward` methods close over a path,
+;; The `forward` and `backward` methods offer depth-first traversal by
+;; moving right/down or left/up respectively. They close over a path,
 ;; creating traversal methods that can be applied to locations.
 
 (deftest walking
@@ -255,8 +258,8 @@
       (is (= (tag li) :li))
       (is (= (tag head) :head)))))
 
-;; Editing commands make changes to a particular node after walking to
-;; it.
+;; Editing commands make changes to a particular node. Attributes,
+;; content, or structure can all be modified.
 
 (deftest editing
   (let [top (sxml-zip `(:doc))]
@@ -284,7 +287,9 @@
         "Setters can be composed with modify.")))
 
 ;; These traversal and editing methods can be combined to make several
-;; transformations to a document at once.
+;; transformations to a document at once. By expressing navigation and
+;; editing commands in this fashion, complex document transformations
+;; can be achieved with a simplicity that approaches `assoc-in`.
 
 (deftest complete-example
   (is (= (transform-sxml example-doc

@@ -134,14 +134,16 @@
 ;; editing it are also provided.
 
 (defn sxml-zip
+  "Create a zipper over an SXML document."
   [doc]
 
   (zip/xml-zip (sxml->node doc)))
 
 (defn sxml-root
-  [zipper]
+  "Zip up from the given location, creating a new SXML document."
+  [loc]
 
-  (node->sxml (zip/root zipper)))
+  (node->sxml (zip/root loc)))
 
 (defn node
   "Return the node for the current location, can handle nil location."
@@ -272,9 +274,9 @@
 
 ;;; Editing
 
-;; Zippers are transformed by a series of functions that take a zipper
-;; and return an updated zipper. A transformation could be a movement
-;; or an edit.
+;; Zippers are transformed by a series of functions that take a
+;; location as input and produce an updated location as output. A
+;; transformation could be a movement or an edit.
 
 (defn transformer
   "Reduce a location by applying a series of movements and
