@@ -6,6 +6,7 @@ experience with Clojure or Java.
 
 + hello-world
 + use-java
++ strings
 + basic-io
 + functional-data
 
