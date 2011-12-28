@@ -19,8 +19,10 @@
 ;; The [`clojure.test`][0] package exports `deftest` to define tests
 ;; and `is` to make assertions.
 
-(deftest test-main
-  (is (= "Hello, world.\n" (with-out-str (-main)))))
+(deftest verify-main
+  (is (= (with-out-str (-main))
+         "Hello, world.\n")
+      "The main program produces the expected output."))
 
 ;; [0] http://clojure.github.com/clojure/clojure.test-api.html
 ;; [1] https://github.com/technomancy/leiningen/blob/master/doc/TUTORIAL.md

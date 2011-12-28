@@ -1,9 +1,15 @@
 ;;;; Using Java from Clojure
 ;;;;
-;;;; This example shows how to convert Markdown to HTML with the
-;;;; native Java project [pegdown][0] from Clojure. Begin by adding
-;;;; the dependency to `project.clj` and an `:import` to the `ns`
-;;;; declaration of a Clojure module.
+;;;; The use of [pegdown][0] demonstrates how Java libraries can be
+;;;; referenced directly from Clojure programs. Functions declared
+;;;; below make the pegdown dependency transparent to consumers of
+;;;; this project. For example, to read in markdown from a file and
+;;;; print the corresponding HTML:
+;;;;
+;;;;     (file-to-html "path/to/file.md")
+;;;;
+;;;; A dependency has been added to `project.clj` and an `:import` to
+;;;; the `ns` declaration of this module.
 
 (ns use-java.core
   (:import [org.pegdown PegDownProcessor Extensions]))
@@ -11,11 +17,25 @@
 
 ;;; PegDown
 
-;; Static properties can be accessed using either `CLASS/NAME` or
-;; `(. CLASS NAME)`. Instances are constructed with a
-;; `(CLASS. arg...)` form. Methods are invoked by passing the instance
-;; and arguments to a method: `(.methodName obj arg...)`. See [Java
-;; Interop][1] for more details.
+;; Clojure's dot special form is the basis for interacting with
+;; Java. There are also several shortcut forms for common cases. For
+;; example:
+;;
+;; + Static properties can be accessed using `(. CLASS NAME)`
+;;   or `CLASS/NAME`
+;;
+;; + Instances are constructed with a `(CLASS. arg...)` form or the
+;;   new macro: `(new CLASS arg...)`
+;;
+;; + Methods are invoked by passing the instance and arguments to a
+;;   method: `(.methodName obj arg...)` or with the dot form: `(. obj
+;;   (methodName arg...))`
+;;
+;; See [Java Interop][1] for more details.
+;;
+;; Pegdown works by creating a `PegDownProcessor` instance and calling
+;; its `markdownToHtml` method on a string or stream. A processor can
+;; accept optional flags to modify the parser's behavior.
 
 (def DEFAULT-OPTIONS
   (bit-or

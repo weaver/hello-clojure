@@ -7,6 +7,7 @@ experience with Clojure or Java.
 + hello-world
 + use-java
 + basic-io
++ functional-data
 
 
 ## Installing Clojure ##

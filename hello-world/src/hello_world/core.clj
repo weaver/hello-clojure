@@ -9,6 +9,12 @@
 ;;;; + Update `core.clj` with your main program.
 ;;;; + A project can be run using `lein run`.
 ;;;; + Create a standalone `.jar` using `lein uberjar`.
+;;;;
+;;;; Once all of this is done, run the jar from the command line like
+;;;; this:
+;;;;
+;;;;     java -jar hello-world-0.1.0-standalone.jar
+;;;;
 
 
 ;;; Main Program
