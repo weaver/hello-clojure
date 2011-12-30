@@ -42,9 +42,31 @@
   (is (isa? Person java.lang.Comparable)
       "The `isa?` method allows reflection on types.")
 
+  (is (= (ancestors Person)
+         #{clojure.lang.IPersistentCollection
+           java.io.Serializable
+           java.util.Map
+           clojure.lang.ILookup
+           clojure.lang.IRecord
+           clojure.lang.Associative
+           java.lang.Iterable
+           clojure.lang.IMeta
+           clojure.lang.IKeywordLookup
+           clojure.lang.Seqable
+           clojure.lang.IObj
+           java.lang.Comparable
+           clojure.lang.IPersistentMap
+           java.lang.Object
+           clojure.lang.Counted})
+      "If necessary, all of the interfaces and superclasses of a type
+      can be enumerated.")
+
   (let [alan (Person. "Alan" :male)]
     (is (instance? Person alan)
         "Type checks are made with `instance?`")
+
+    (is (identical? (class alan) Person)
+        "The class of an instance can be found with `class`.")
 
     (is (instance? java.lang.Comparable alan)
         "Since Person implements Comparable, a Person instance is
