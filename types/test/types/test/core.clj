@@ -38,6 +38,18 @@
      (compare (:name this) (:name other))
      (compare (:gender this) (:gender other)))))
 
+(deftest reflection
+  (is (isa? Person java.lang.Comparable)
+      "The `isa?` method allows reflection on types.")
+
+  (let [alan (Person. "Alan" :male)]
+    (is (instance? Person alan)
+        "Type checks are made with `instance?`")
+
+    (is (instance? java.lang.Comparable alan)
+        "Since Person implements Comparable, a Person instance is
+        Comparable.")))
+
 (deftest compare-people
   (let [george (Person. "George" :male)
         betty (Person. "Betty" :female)]
@@ -61,25 +73,33 @@
 ;; `Tree` is a `deftype`. Since `Tree` conforms to the IPersistentMap
 ;; interface, familiar functions like `assoc` and `vals` can be used
 ;; by the application code.
+;;
+;; Clojure supports [type hints][4], although use is discouraged
+;; unless it's a performance-critical piece of code. A hint looks like
+;; `^TypeName` and can appear before a function parameter or the use
+;; of a binding in a function body. The database methods below are
+;; type-hinted as an example.
 
 (defn open-db
   []
   (tree))
 
 (defn add-people
-  [db & people]
-  (apply assoc db (interleave (map :name people) people)))
+  [^types.core.Tree db & people]
+  (apply assoc db (interleave
+                   (map #(:name ^Person %) people)
+                   people)))
 
 (defn list-people
-  [db]
+  [^types.core.Tree db]
   (vals db))
 
 (defn find-person
-  [db name]
+  [^types.core.Tree db ^String name]
   (get db name))
 
 (defn gender-of
-  [db name]
+  [^types.core.Tree db ^String name]
   (:gender (find-person db name)))
 
 (deftest example-application
@@ -211,3 +231,4 @@
 ;; [1]: http://clojure.org/protocols
 ;; [2]: http://clojure.github.com/clojure/clojure.core-api.html#clojure.core/extend-type
 ;; [3]: http://clojure.github.com/clojure/clojure.core-api.html#clojure.core/extend-protocol
+;; [4]: http://clojure.org/java_interop#Java%20Interop-Type%20Hints
