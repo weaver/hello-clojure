@@ -38,6 +38,20 @@
      (compare (:name this) (:name other))
      (compare (:gender this) (:gender other)))))
 
+(deftest people-example
+  (let [george (Person. "George" :male)
+        betty (Person. "Betty" :female)]
+
+    (is (= (:gender george)
+           :male)
+        "The value of a record's field can be accessed using a keyword
+        just like a map.")
+
+    (is (= (sort (list george betty))
+           (list betty george))
+        "People can be ordered because Person implements
+        java.lang.Comparable")))
+
 (deftest reflection
   (is (isa? Person java.lang.Comparable)
       "The `isa?` method allows reflection on types.")
@@ -59,7 +73,8 @@
            java.lang.Object
            clojure.lang.Counted})
       "If necessary, all of the interfaces and superclasses of a type
-      can be enumerated.")
+      can be enumerated. Since `Person` is a record, many of the
+      built-in interfaces are implemented automatically.")
 
   (let [alan (Person. "Alan" :male)]
     (is (instance? Person alan)
@@ -71,20 +86,6 @@
     (is (instance? java.lang.Comparable alan)
         "Since Person implements Comparable, a Person instance is
         Comparable.")))
-
-(deftest compare-people
-  (let [george (Person. "George" :male)
-        betty (Person. "Betty" :female)]
-
-    (is (= (:gender george)
-           :male)
-        "The value of a record's field can be accessed using a keyword
-        just like a map.")
-
-    (is (= (sort (list george betty))
-           (list betty george))
-        "People can be ordered because Person implements
-        java.lang.Comparable")))
 
 
 ;;; Example Application
