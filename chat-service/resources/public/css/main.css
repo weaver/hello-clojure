@@ -1,0 +1,43 @@
+html {
+    width: 700px;
+    margin: 1em auto;
+    font-family: Times;
+    font-size: 16px;
+}
+
+#welcome {}
+
+	h1 {
+	    font-weight: bold;
+	    font-size: 2em;
+	    font-family: Helvetica, Verdana;
+	    margin: 0.1em 0 0.2em 0;
+	}
+
+	#welcome p {
+	    color: #555;
+	    font-size: 0.9em;
+	    margin-bottom: 1em;
+	}
+
+#chat {
+    margin: 2em 0 0 0;
+}
+
+	#chat .transcript {
+	    border: 2px solid #333;
+	    border-radius: 5px;
+	    padding: 0.1em;
+	    height: 25em;
+	    overflow: auto;
+	}
+
+	#chat .controls {
+	    margin-top: 0.5em;
+	}
+
+		#chat .controls [type="text"] {
+		    width: 95.1%;
+		    padding: 0.2em;
+		}
+

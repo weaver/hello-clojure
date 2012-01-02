@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat Lobby</title>
+    <link rel="stylesheet" type="text/css" href="/css/reset-fonts.css" />
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+  </head>
+  <body>
+    <section id="welcome">
+      <h1>Welcome to the Lobby</h1>
+      <p>When you walk through the doorway you notice a fine layer of
+	dust has settled over the floor and all the furniture. You
+	look around for other travelers, but find that you're all
+	alone! A large glowing screen is attached to the south
+	wall. As you walk toward it, you make can see it's a chat
+	transcript of some kind. Should you leave a message?</p>
+    </section>
+
+    <section id="chat">
+      <div class="transcript"></div>
+      <form class="controls">
+	<input type="text" name="message" value=""
+	       autofocus="autofocus" placeholder="Your message here..." />
+	<input type="submit" value="&raquo;" />
+      </form>
+    </section>
+
+    <script type="text/javascript" src="/js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
+  </body>
+</html>
+

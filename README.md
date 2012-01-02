@@ -10,6 +10,7 @@ experience with Clojure or Java.
 + strings
 + functional-data
 + types
++ chat-service
 
 
 ## Installing Clojure ##
